@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Notas</title>
+	<script src="./script.js"></script>
+</head>
+<body>
+	<h1><u>Introducir notas</u></h1>
+	<form>
+		<label for="modulo1">Módulo:</label>
+		<select name="modulo" id="modulo">
+			<option value="none" selected>---</option>
+			<option value="dws">DWS</option>
+			<option value="diw">DIW</option>
+			<option value="dwc">DWC</option>
+			<option value="daw">DAW</option>
+		</select>
+		<br>
+		<label for="nombre">Nombre alumno:</label>
+		<input type="text" name="nombre" id="nombre">
+		<br>
+		<label for="nota">Nota:</label>
+		<input type="text" name="nota" id="nota">
+		<br>
+		<button type="button">Guardar</button>
+	</form>
+	<button type="button">Listado</button>
+</body>
+</html>

@@ -1,0 +1,1 @@
+Points of sale. terminal punto de venta (tpv)

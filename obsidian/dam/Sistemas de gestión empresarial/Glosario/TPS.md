@@ -1,0 +1,1 @@
+Stransaction processing system. Sistea de procesamiento de transaccines
