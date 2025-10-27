@@ -1,0 +1,25 @@
+:root
+{
+	color-scheme:		light dark;
+	--text-primary:		light-dark(#131217, #C4BEFE);
+	--text-secondary:	light-dark(#C4BEFE, #131217);
+	--bg-primary:		light-dark(#8a2be2, #131217);
+	--bg-secondary:		light-dark(#131217, #8a2be2);
+	--border-primary:	light-dark(var(--text-primary), var(--text-primary));
+	--border-secondary:	light-dark(#4b4b4b, #4b4b4b);
+}
+
+*
+{
+	color: var(--text-primary);
+}
+
+body
+{
+	background-color: var(--bg-primary);
+}
+
+main
+{
+	background-color: var(--bg-secondary);
+}

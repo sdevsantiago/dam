@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>Mostrar Ocultar</title>
+		<style type="text/css">
+		.clasecss
+		{
+			background-color: #ff8800;
+			font-weight: bold;
+		}
+
+		.clase1css
+		{
+			background-color: #024A86;
+			font-weight: bold;
+		}
+		</style>
+		<script src="../jquery.js" type="text/javascript"></script>
+		<script src="./script.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+
+		<form>
+
+			Nombre: <input type="text" name="nombre" id="nombre">
+			<br>
+			<input type="checkbox" name="mayor_edad" value="1" id="mayoria_edad"> Soy mayor de edad
+			<br>
+			<div id="formulariomayores" style="display: none;">
+				Profesion: <input type="text" name="profesion" id="profesion">
+				años experiencia: <input type="text" name="experiencia" id="experiencia">
+				Edad: <input type="text" name="edad" id="edad">
+
+			</div>
+			<div id="formulariomenores" style="display: block;">
+				Edad: <input type="text" name="edad" id="edad">
+				estudios: <input type="text" name="estudios" id="estudios">
+
+			</div>
+
+			<div id="verdatos" >
+				<input type="button" id="ver" value="Ver" >
+				<input type="button" id="restaurar" value="Restaurar" >
+				<h3>Datos introducidos</h3>
+				<ul>
+
+				</ul>
+			</div>
+		</form>
+
+	</body>
+</html>
