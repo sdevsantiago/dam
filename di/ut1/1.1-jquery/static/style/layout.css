@@ -1,0 +1,34 @@
+:root
+{
+	--border-radius:	5px;
+	--spacing: 			3.56667px;
+}
+
+html,
+body
+{
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+body
+{
+	display: flex;
+	flex-direction: row;
+}
+
+header
+{
+	flex: 0;
+	text-align: center;
+	padding-top: var(--spacing);
+	padding-bottom: var(--spacing);
+}
+
+main
+{
+	flex: 1;
+	margin: var(--spacing) var(--spacing) var(--spacing) 0;
+	border-radius: var(--border-radius);
+}

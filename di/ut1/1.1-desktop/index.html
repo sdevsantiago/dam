@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>sdevsantiago</title>
+	<link rel="shortcut icon" href="./static/root/favicon.ico" type="image/x-icon">
+	<!-- Base JQuery -->
+	<script src="./static/vendor/jquery-base/jquery.js"></script>
+	<script src="./static/vendor/jquery-base/jquery.cookie.js"></script>
+	<!-- JQuery UI -->
+	<script src="./static/vendor/jquery-ui-1.14.1.custom/jquery-ui.js"></script>
+	<link rel="stylesheet" href="./static/vendor/jquery-ui-1.14.1.custom/jquery-ui.css">
+	<link rel="stylesheet" href="./static/vendor/jquery-ui-1.14.1.custom/jquery-ui.structure.css">
+	<link rel="stylesheet" href="./static/vendor/jquery-ui-1.14.1.custom/jquery-ui.theme.css">
+	<!-- JQuery Terminal -->
+	<script src="./static/vendor/jquery.terminal/js/jquery.terminal.js"></script>
+	<link rel="stylesheet" href="./static/vendor/jquery.terminal/css/jquery.terminal.css">
+	<!-- Google Fonts API -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=bedtime,light_mode,monitor,power_settings_new,terminal">
+	<!-- Custom -->
+	<script src="./static/scripts/status-bar.js"></script>
+	<script src="./static/scripts/apps.js"></script>
+	<link rel="stylesheet" href="./static/style/defaults.css">
+	<link rel="stylesheet" href="./static/style/theme.css">
+	<link rel="stylesheet" href="./static/style/layout.css">
+	<link rel="stylesheet" href="./static/style/status-bar.css">
+	<link rel="stylesheet" href="./static/style/apps.css">
+</head>
+<body>
+	<header>
+		<section id="modules-top">
+			<span id="time"></span>
+		</section>
+		<section id="modules-middle">
+			<div id="active-app-module">
+				<span id="active-app-icon" class="icon material-symbols-outlined"></span>
+				<span id="active-app-name"></span>
+			</div>
+		</section>
+		<section id="modules-bottom">
+			<button type="button" id="color-scheme">
+				<span class="icon material-symbols-outlined">bedtime</span>
+			</button>
+			<button type="button" id="power">
+				<span class="icon material-symbols-outlined">power_settings_new</span>
+			</button>
+		</section>
+	</header>
+	<main>
+		<section id="apps">
+			<ul id="sortable"></ul>
+		</section>
+		<section id="app-launcher">
+			<button type="button" data-app="terminal">
+				<span class="icon material-symbols-outlined">terminal</span>
+			</button>
+		</section>
+	</main>
+</body>
+</html>
