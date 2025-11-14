@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Ejemplo PHP con jQuery Ajax</title>
+	
+	<!-- Bootstrap-->
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+	<!-- jQuery-->
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="main3.js"></script>
+	<style>
+		body {
+			margin: 80px auto;
+			width: 500px;
+		}
+		h1 {
+			text-align: center;
+		}
+		.fa {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<h1>jQuery<br/>Envio de datos por Ajax</h1>
+	<form>
+		<p> 
+		    <label for="nombre">Nombre</label>
+		    <input class="form-control" id="nombre" name="nombre" type="text"/>
+		</p>
+		<p> 
+		    <label for="direccion">Dirección</label>
+		    <input class="form-control" id="direccion" name="direccion" type="text"/>
+		</p>
+		<p> 
+		    <label for="telefono">Teléfno</label>
+		    <input class="form-control" id="telefono" name="telefono" type="text"/>
+		</p>
+		<p> 
+		    <label for="edad">Edad</label>
+		    <input class="form-control" id="edad" name="edad" type="text"/>
+		</p>
+		<input class="btn btn-primary" type="submit" value="Datos">
+		<input class="btn btn-primary" type="submit" value="<<" id="anterior">
+		<input class="btn btn-primary" type="submit" value=">>" id="siguiente">
+		<input class="btn btn-primary" type="submit" value="Añadir" id="anadir">
+		<i class="fa fa-refresh fa-spin"></i>
+	</form>
+	<span></span>
+</body>
+</html>

@@ -1,0 +1,38 @@
+[
+    {
+        "nombre": "pepe",
+        "direccion": "c\/pez",
+        "telefono": "648960976",
+        "edad": 25
+    },
+    {
+        "nombre": "juan",
+        "direccion": "c\/Rodrigo",
+        "telefono": "125789543",
+        "edad": 28
+    },
+    {
+        "nombre": "luis",
+        "direccion": "c\/Margarita",
+        "telefono": "874567284",
+        "edad": 30
+    },
+    {
+        "nombre": "Ana",
+        "direccion": "c\/aaaa",
+        "telefono": "874567284",
+        "edad": "30"
+    },
+    {
+        "nombre": "Elena",
+        "direccion": "c\/aaaa",
+        "telefono": "874567284",
+        "edad": "30"
+    },
+    {
+        "nombre": "Alan",
+        "direccion": "c\/bbb",
+        "telefono": "111111",
+        "edad": "30"
+    }
+]
