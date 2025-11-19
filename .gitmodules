@@ -1,3 +1,12 @@
 [submodule "di/1eval/static/vendor/jquery.terminal"]
 	path = di/1eval/static/vendor/jquery.terminal
 	url = https://github.com/jcubic/jquery.terminal
+[submodule "pmm/examples/basic-android-kotlin-compose-training-tip-calculator"]
+	path = pmm/examples/basic-android-kotlin-compose-training-tip-calculator
+	url = git@github.com:google-developer-training/basic-android-kotlin-compose-training-tip-calculator.git
+[submodule "pmm/examples/basic-android-kotlin-compose-training-dice-roller"]
+	path = pmm/examples/basic-android-kotlin-compose-training-dice-roller
+	url = git@github.com:google-developer-training/basic-android-kotlin-compose-training-dice-roller.git
+[submodule "pmm/examples/basic-android-kotlin-compose-training-lemonade"]
+	path = pmm/examples/basic-android-kotlin-compose-training-lemonade
+	url = git@github.com:google-developer-training/basic-android-kotlin-compose-training-lemonade.git
