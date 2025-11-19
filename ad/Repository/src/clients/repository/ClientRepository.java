@@ -17,12 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 import clients.Client;
-import clients.parameters.AccountStatus;
+import clients.parameters.ClientStatus;
 import repository.IRepositoryExtend;
 
 public class ClientRepository implements IRepositoryExtend<Client, String> {
 
-	private static final String INVALID_ID_EXCEPTION_MESSAGE = "ID must not be null or empty";
+	private static final String INVALID_ID_EXCEPTION_MESSAGE = "Username must not be null or empty";
 	private static final String NULL_CLIENT_EXCEPTION_MESSAGE = "Client must not be null";
 
 	private static final short DATA_SOURCE_FILE_USERNAME_INDEX = 0;
@@ -106,6 +106,20 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 		return instance;
 	}
 
+	/**
+	 * Returns the singleton instance of ClientRepository. If none exists, suggests initializing it first.
+	 *
+	 * @return the singleton instance
+	 *
+	 * @throws IllegalStateException if the instance has not been initialized yet
+	 */
+	public static ClientRepository getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("ClientRepository instance has not been initialized. Call getInstance(String filepath) first.");
+		}
+		return instance;
+	}
+
 	public long count() {
 		return (long)(this.clientsCache.size());
 	}
@@ -114,7 +128,7 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 		long count = 0;
 
 		for (Client client : this.clientsCache.values()) {
-			if (client.getStatus() == AccountStatus.ACTIVE) {
+			if (client.getStatus() == ClientStatus.ACTIVE) {
 				count++;
 			}
 		}
@@ -125,11 +139,17 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 		long count = 0;
 
 		for (Client client : this.clientsCache.values()) {
-			if (client.getStatus() == AccountStatus.INACTIVE) {
+			if (client.getStatus() == ClientStatus.INACTIVE) {
 				count++;
 			}
 		}
 		return count;
+	}
+
+	public void add(Client client) {
+		if (this.existsById(client.getUsername()))
+			throw new IllegalArgumentException("Client with username " + client.getUsername() + " already exists");
+		this.save(client);
 	}
 
 	/**
@@ -147,15 +167,14 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 
 		if (username == null || username.isEmpty() || username.isBlank()) {
 			throw new IllegalArgumentException(INVALID_ID_EXCEPTION_MESSAGE);
-
 		}
 
 		if (this.existsById(username)) {
 			client = this.findById(username);
 			// check if client is not already inactive
-			if (client.getStatus() != AccountStatus.INACTIVE) {
+			if (client.getStatus() != ClientStatus.INACTIVE) {
 				// change status to inactive and write changes if needed
-				client.setStatus(AccountStatus.INACTIVE);
+				client.setStatus(ClientStatus.INACTIVE);
 				// write changes to data source and in-memory cache
 				this.save(client);
 			}
@@ -260,7 +279,7 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 		String username = values[DATA_SOURCE_FILE_USERNAME_INDEX];
 		String email = values[DATA_SOURCE_FILE_EMAIL_INDEX];
 		int password = Integer.parseInt(values[DATA_SOURCE_FILE_PASSWORD_INDEX]);
-		AccountStatus status = AccountStatus.fromValue(Integer.parseInt(values[DATA_SOURCE_FILE_IS_ACTIVE_INDEX]));
+		ClientStatus status = ClientStatus.fromValue(Integer.parseInt(values[DATA_SOURCE_FILE_IS_ACTIVE_INDEX]));
 
 		return new Client(username, email, password, status);
 	}
@@ -281,5 +300,4 @@ public class ClientRepository implements IRepositoryExtend<Client, String> {
 			Integer.toString(client.getStatus().getValue())
 		);
 	}
-
 }

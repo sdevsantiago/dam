@@ -1,12 +1,12 @@
 package clients.parameters;
 
-public enum AccountStatus {
+public enum ClientStatus {
 	ACTIVE(1),
 	INACTIVE(0);
 
 	private final int value;
 
-	AccountStatus(int value) {
+	ClientStatus(int value) {
 		this.value = value;
 	}
 
@@ -14,8 +14,8 @@ public enum AccountStatus {
 		return value;
 	}
 
-	public static AccountStatus fromValue(int value) {
-		for (AccountStatus status : AccountStatus.values()) {
+	public static ClientStatus fromValue(int value) {
+		for (ClientStatus status : ClientStatus.values()) {
 			if (status.value == value) {
 				return status;
 			}

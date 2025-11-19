@@ -6,7 +6,7 @@ public class Client {
 	private Username username;
 	private Email email;
 	private Password password;
-	private AccountStatus status;
+	private ClientStatus status;
 
 	/**
 	 * Constructor for Client
@@ -16,7 +16,7 @@ public class Client {
 		String email,
 		String password,
 		boolean validatePassword,
-		AccountStatus status
+		ClientStatus status
 	) {
 		this.setUsername(name);
 		this.setEmail(email);
@@ -31,7 +31,7 @@ public class Client {
 		String name,
 		String email,
 		int passwordHash,
-		AccountStatus status
+		ClientStatus status
 	) {
 		this.setUsername(name);
 		this.setEmail(email);
@@ -43,7 +43,7 @@ public class Client {
 		String name,
 		String email,
 		String password,
-		AccountStatus status
+		ClientStatus status
 	) {
 		this.setUsername(name);
 		this.setEmail(email);
@@ -83,11 +83,11 @@ public class Client {
 		this.password = new Password(passwordHash);
 	}
 
-	public AccountStatus getStatus() {
+	public ClientStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(AccountStatus status) {
+	public void setStatus(ClientStatus status) {
 		this.status = status;
 	}
 
