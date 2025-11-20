@@ -1,19 +1,21 @@
 package com.example.p2_artspace_sergio_ivan
 
-import android.media.Image
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,7 +25,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,32 +90,49 @@ fun ShowArtwork()
         )
     )
     val artwork = artworkList[index]
+    val orientation = LocalConfiguration.current.orientation
+    val paddingValues =
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) arrayOf(50.dp, 25.dp)
+        else arrayOf(50.dp, 50.dp)
+    val imagesSize =
+        if (orientation == Configuration.ORIENTATION_PORTRAIT) 300
+        else 150
+    val PADDING_HORIZONTAL = 0
+    val PADDING_VERTICAL = 1
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 50.dp, vertical = 25.dp)
+            .padding(
+                horizontal = paddingValues[PADDING_HORIZONTAL],
+                vertical = paddingValues[PADDING_VERTICAL]
+            )
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Column {1
-            val maxWidthModifier: Modifier = Modifier.fillMaxWidth()
+        val modifier: Modifier = Modifier.fillMaxWidth()
 
-            ArtworkTitle(
-                artwork.title,
-                maxWidthModifier)
-            ArtworkImage(
-                artwork.image,
-                maxWidthModifier)
-            ArtworkInfo(
-                artwork.author,
-                artwork.year,
-                index + 1,
-                artworkList.size,
-                maxWidthModifier)
-            ArtworkControls(
-                onPreviousClick = { if (index - 1 < 0) index = artworkList.size - 1 else index-- },
-                onNextClick = { if (index + 1 < artworkList.size) index++ else index = 0 },
-                maxWidthModifier)
-        }
+        ArtworkTitle(
+            artwork.title,
+            modifier
+        )
+        ArtworkImage(
+            drawableImage = artwork.image,
+            modifier = Modifier.fillMaxWidth(),
+            imageSize = imagesSize
+        )
+        ArtworkInfo(
+            artwork.author,
+            artwork.year,
+            index + 1,
+            artworkList.size,
+            modifier
+        )
+        ArtworkControls(
+            onPreviousClick = { if (index - 1 < 0) index = artworkList.size - 1 else index-- },
+            onNextClick = { if (index + 1 < artworkList.size) index++ else index = 0 },
+            modifier
+        )
     }
 }
 
@@ -128,13 +149,15 @@ fun ArtworkTitle(title: String, maxWidthModifier: Modifier)
 }
 
 @Composable
-fun ArtworkImage(drawableImage: Int, maxWidthModifier: Modifier)
+fun ArtworkImage(drawableImage: Int, modifier: Modifier, imageSize: Int)
 {
-    Row(modifier = maxWidthModifier) {
+    Row(modifier = modifier) {
         Image(
             painter = painterResource(id = drawableImage),
             contentDescription = null,
-            modifier = maxWidthModifier
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(imageSize.dp)
         )
     }
 }
@@ -175,14 +198,14 @@ fun ArtworkControls(onPreviousClick: () -> Unit, onNextClick: () -> Unit, maxWid
     ) {
         Button(onClick = onPreviousClick) {
             Text(
-                text = "Previous",
+                text = stringResource(R.string.button_previous),
                 modifier = buttonWidth,
                 textAlign = TextAlign.Center
             )
         }
         Button(onClick = onNextClick ) {
             Text(
-                text = "Next",
+                text = stringResource(R.string.button_next),
                 modifier = buttonWidth,
                 textAlign = TextAlign.Center
             )

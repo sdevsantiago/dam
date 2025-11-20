@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">P2_ArtSpace_Sergio_Ivan</string>
+    <string name="app_name" translatable="false">P2_ArtSpace_Sergio_Ivan</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
 </resources>
