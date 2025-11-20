@@ -3,6 +3,10 @@ package products;
 import products.parameters.ProductAvailability;
 
 public class Product {
+
+	private static final String INVALID_STOCK_EXCEPTION_MESSAGE = "Stock cannot be negative";
+	private static final String INVALID_AMOUNT_EXCEPTION_MESSAGE = "Amount cannot be negative";
+
 	private Long barcode;
 	private String name;
 	private Double currentPrice;
@@ -43,6 +47,18 @@ public class Product {
 		Integer stock
 	) {
 		this(barcode, name, currentPrice, null, category, stock, ProductAvailability.AVAILABLE);
+	}
+
+	/**
+	 * Constructor for Product class with no barcode and no old price.
+	 */
+	public Product(
+		String name,
+		Double currentPrice,
+		String category,
+		Integer stock
+	) {
+		this(null, name, currentPrice, null, category, stock, ProductAvailability.AVAILABLE);
 	}
 
 	/**
@@ -108,7 +124,31 @@ public class Product {
 	public void setStock(
 		Integer stock
 	) {
+		if (stock < 0) {
+			throw new IllegalArgumentException(INVALID_STOCK_EXCEPTION_MESSAGE);
+		}
 		this.stock = stock;
+	}
+
+	public void increaseStock(
+		Integer amount
+	) {
+		if (amount < 0) {
+			throw new IllegalArgumentException(INVALID_AMOUNT_EXCEPTION_MESSAGE);
+		}
+		this.stock += amount;
+	}
+
+	public void decreaseStock(
+		Integer amount
+	) {
+		if (amount < 0) {
+			throw new IllegalArgumentException(INVALID_AMOUNT_EXCEPTION_MESSAGE);
+		}
+		if (this.getStock() - amount < 0) {
+			throw new IllegalArgumentException(INVALID_STOCK_EXCEPTION_MESSAGE);
+		}
+		this.stock -= amount;
 	}
 
 	public ProductAvailability getAvailability() {

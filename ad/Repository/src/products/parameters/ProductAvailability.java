@@ -1,7 +1,5 @@
 package products.parameters;
 
-import clients.parameters.ClientStatus;
-
 public enum ProductAvailability {
 	AVAILABLE((short) 1),
 	UNAVAILABLE((short) 0);

@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ import repository.IRepositoryExtend;
 public class ProductRepository implements IRepositoryExtend<Product, Long> {
 
 	private static final String EMPTY_DATA_SOURCE_FILE_EXCEPTION_MESSAGE = "Product Repository file path must not be null or empty";
-	private static final String INVALID_ID_EXCEPTION_MESSAGE = "Barcode must not be null, negative or zero";
+	private static final String INVALID_BARCODE_EXCEPTION_MESSAGE = "Barcode must be a positive non-null value";
 	private static final String NULL_PRODUCT_EXCEPTION_MESSAGE = "Product must not be null";
 
 	private static final short DATA_SOURCE_FILE_BARCODE_INDEX = 0;
@@ -93,7 +94,7 @@ public class ProductRepository implements IRepositoryExtend<Product, Long> {
 	}
 
 	/**
-	 * Returns the singleton instance of ClientRepository. If none exists, creates one.
+	 * Returns the singleton instance of ProductRepository. If none exists, creates one.
 	 *
 	 * @param filepath the data source file path
 	 *
@@ -110,7 +111,71 @@ public class ProductRepository implements IRepositoryExtend<Product, Long> {
 	}
 
 	public long count() {
-		return (long)(this.productsCache.size());
+		return this.countAvailable();
+	}
+
+	/**
+	 * Counts the number of available products in the repository.
+	 *
+	 * @return the number of available products
+	 */
+	public long countAvailable() {
+		long count = 0;
+
+		for (Product product : this.productsCache.values()) {
+			if (product.isAvailable()) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Counts the number of unavailable products in the repository.
+	 *
+	 * @return the number of unavailable products
+	 */
+	public long countUnavailable() {
+		long count = 0;
+
+		for (Product product : this.productsCache.values()) {
+			if (!product.isAvailable()) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 * Adds a product to the repository. If the product has no barcode, assigns the next available.
+	 *
+	 * @param product the product to add
+	 *
+	 * @throws IllegalArgumentException if the product is null
+	 * @throws IllegalStateException    if a product with the same barcode already exists
+	 */
+	public void add(
+		Product product
+	) throws IllegalArgumentException, IllegalStateException {
+		if (product == null) {
+			throw new IllegalArgumentException(NULL_PRODUCT_EXCEPTION_MESSAGE);
+		}
+
+		if (product.getBarcode() == null) {
+			Long maxBarcode = 1L;
+			// read cache and assign the next available barcode
+			List<Long> barcodes = new ArrayList<>(this.productsCache.keySet());
+			if (!barcodes.isEmpty()) {
+				maxBarcode = Collections.max(barcodes) + 1;
+			}
+			product.setBarcode(maxBarcode);
+		}
+		else if (this.existsById(product.getBarcode())) {
+			throw new IllegalStateException("Product with barcode " + product.getBarcode() + " already exists");
+		}
+
+		// save the new product
+		this.save(product);
 	}
 
 	/**
@@ -126,7 +191,7 @@ public class ProductRepository implements IRepositoryExtend<Product, Long> {
 		Product product;
 
 		if (barcode == null || barcode <= 0) {
-			throw new IllegalArgumentException(INVALID_ID_EXCEPTION_MESSAGE);
+			throw new IllegalArgumentException(INVALID_BARCODE_EXCEPTION_MESSAGE);
 		}
 
 		if (this.existsById(barcode)) {
@@ -156,13 +221,14 @@ public class ProductRepository implements IRepositoryExtend<Product, Long> {
 
 	/**
 	 * Checks whether a product with the given id exists.
-	 * A product whose status is UNAVAILABLE is considered to exist.
+	 * A product whose status is UNAVAILABLE is considered to exist but is not counted when
+	 * {@link #count()} is called.
 	 */
 	public boolean existsById(
 		Long barcode
 	) throws IllegalArgumentException {
 		if (barcode == null) {
-			throw new IllegalArgumentException(INVALID_ID_EXCEPTION_MESSAGE);
+			throw new IllegalArgumentException(INVALID_BARCODE_EXCEPTION_MESSAGE);
 		}
 
 		// check whether the product exists in the in-memory cache

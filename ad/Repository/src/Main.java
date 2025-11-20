@@ -1,8 +1,11 @@
+import java.util.ArrayList;
 import java.util.List;
 
 import clients.Client;
 import clients.parameters.ClientStatus;
 import clients.repository.ClientRepository;
+import orders.Order;
+import orders.repository.OrderRepository;
 import products.Product;
 import products.repository.ProductRepository;
 
@@ -10,22 +13,26 @@ public class Main {
     public static void main(String[] args) {
         final ClientRepository clientRepository = ClientRepository.getInstance("data/clients.csv");
         final ProductRepository productRepository = ProductRepository.getInstance("data/products.csv");
-        final List<Client> clients = clientRepository.findAllToList();
-        final List<Product> products = productRepository.findAllToList();
-
-        clients.get(0).setStatus(ClientStatus.ACTIVE);
-        clientRepository.save(clients.get(0));
 
         System.out.println("Clients in repository:");
-        for (Client client : clients) {
+        for (Client client : clientRepository.findAllToList()) {
             System.out.println("- " + client.getUsername() + " (" + client.getEmail() + ") - Status: " + client.getStatus());
         }
-
         System.out.println();
-
         System.out.println("Products in repository:");
-        for (Product product : products) {
+        for (Product product : productRepository.findAllToList()) {
             System.out.println("- " + product.getName() + " - Price: $" + product.getCurrentPrice() + " - Stock: " + product.getStock());
+        }
+
+        OrderRepository orderRepository = OrderRepository.getInstance("data/orders.csv");
+        Order newOrder = new Order(
+            clientRepository.findById("frank"),
+            productRepository.findAllToList()
+        );
+        orderRepository.save(newOrder);
+        System.out.println();
+        for (Order order : orderRepository.findAllToList()) {
+            System.out.println("Order ID: " + order.getId() + " - Client: " + order.getClient().getUsername() + " - Products: " + order.getProducts().size());
         }
     }
 
