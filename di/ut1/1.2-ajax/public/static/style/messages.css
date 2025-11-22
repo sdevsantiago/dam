@@ -1,0 +1,29 @@
+.message {
+	margin: 10px 0;
+	padding: 12px 16px;
+	border-radius: 18px;
+	max-width: 70%;
+	word-wrap: break-word;
+}
+
+.user-message {
+	background-color: #007bff;
+	color: white;
+	margin-left: auto;
+	margin-right: 0;
+	text-align: right;
+}
+
+.other-user-message {
+	background-color: #f1f1f1;
+	color: #333;
+	margin-left: 0;
+	margin-right: auto;
+	text-align: left;
+}
+
+.message-container {
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}

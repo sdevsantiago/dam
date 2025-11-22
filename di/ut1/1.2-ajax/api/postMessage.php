@@ -1,12 +1,13 @@
 <?php
 
-// discard requests other than POST
+session_write_close();
+
+// check if request is of type POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+	// discard requests other than POST
 	http_response_code(405);
 	exit;
 }
-
-session_write_close();
 
 if (!strlen(trim($_POST['message']))) {
 	// do nothing if message is empty, this is done also on client side, but just in case
@@ -26,8 +27,10 @@ if (file_exists($MESSAGES_FILE)) {
 	// as file didn't exist, store empty data
 	$jsonData = [];
 }
+
 // prepare data to add
 $data = [
+	'id' => uniqid(), // id based on current time in microseconds
 	'username' => $_POST['username'],
 	'message' => $_POST['message'],
 	'timestamp' => $_POST['timestamp']
