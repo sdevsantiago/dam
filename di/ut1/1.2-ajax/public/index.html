@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>WhatsApp 2</title>
+	<link rel="shortcut icon" href="static/root/favicon.ico" type="image/x-icon">
 	<!-- Google Icons -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,edit,send" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=delete,edit,send" />
 	<!-- JQuery -->
 	<script src="static/vendor/jquery/jquery.js" type="text/javascript"></script>
 	<!-- Scripts -->
@@ -15,7 +17,9 @@
 </head>
 <body>
 	<div id="messages"></div>
-	<input type="text" placeholder="Type a message..." />
-	<button type="button" id="sendMessageButton"><span class="material-symbols-outlined">send</span></button>
+	<div id="messageInputContainer">
+		<input type="text" id="messageInput" placeholder="Type a message..." />
+		<button type="button" id="sendMessageButton"><span class="material-symbols-rounded material-symbols-rounded-fill">send</span></button>
+	</div>
 </body>
 </html>

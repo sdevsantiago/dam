@@ -1,4 +1,16 @@
 $(document).ready(function () {
+	let chatRoom;
+	let user;
+
+	// ask for chat room until a valid one is provided
+	do {
+		chatRoom = prompt("Enter your chat room:");
+	} while (chatRoom === null || !chatRoom.trim().length);
+
+	// store chat room in session storage
+	sessionStorage.setItem('chatRoom', chatRoom);
+
+	// ask for username until a valid one is provided
 	do {
 		user = prompt("Enter your username:");
 	} while (user === null || !user.trim().length);
@@ -16,6 +28,14 @@ $(document).ready(function () {
 	setInterval(() => {
 		getMessages();
 	}, 1000);
+
+	// send message on enter key press
+	$('#messageInput').on('keypress', function (e) {
+		if (e.which === 13) { // Enter key code
+			sendMessage($(this).val());
+			$(this).val(''); // clear input field
+		}
+	});
 });
 
 /**
@@ -50,6 +70,8 @@ function getCurrentTimestampSeconds() {
  *
  * @param {string} messageString - The message content to be sent. Empty or whitespace-only messages are ignored.
  *
+ * @returns {void} void
+ *
  * @description This function validates the message content, generates a timestamp,
  * and sends the message data to the server endpoint 'api/postMessage.php' along with
  * the chat room identifier, username from session storage, and timestamp.
@@ -67,7 +89,7 @@ function sendMessage(messageString) {
 		url: 'api/postMessage.php',
 		type: 'post',
 		data: {
-			chatRoom: 'chatRoom',
+			chatRoom: sessionStorage.getItem('chatRoom'),
 			username: sessionStorage.getItem('username'),
 			message: messageString,
 			timestamp: timestamp.toString()
@@ -77,6 +99,8 @@ function sendMessage(messageString) {
 
 /**
  * Retrieves messages from the server and updates the chat interface.
+ *
+ * @returns {void} void
  *
  * @description This function uses AJAX to request new, deleted, and edited messages
  * from the server since the last known timestamp. It updates the chat display by
@@ -98,7 +122,7 @@ function getMessages() {
 		url: 'api/getMessages.php',
 		type: 'get',
 		data: {
-			chatRoom: 'chatRoom',
+			chatRoom: sessionStorage.getItem('chatRoom'),
 			timestamp: getMessages.timestamp.toString()
 		},
 		success: function (response) {
@@ -111,11 +135,27 @@ function getMessages() {
 
 				// update timestamp for next call
 				getMessages.timestamp = getCurrentTimestamp();
+
+				// scroll to bottom of messages
+				window.scrollTo(0, document.body.scrollHeight);
 			}
 		}
 	});
 }
 
+/**
+ * Edits an existing message in the chat room by sending an AJAX request to the server.
+ *
+ * @param {string|number} messageId - The unique identifier of the message to be edited
+ * @param {string} newMessage - The new content to replace the existing message
+ *
+ * @returns {void} void
+ *
+ * @description This function sends a POST request to the editMessage.php API endpoint
+ * with the current chat room, username from session storage, message ID, new message content,
+ * and timestamp. The function relies on sessionStorage to contain 'chatRoom' and 'username' values,
+ * and expects getCurrentTimestamp() function to be available in the scope.
+ */
 function editMessage(messageId, newMessage) {
 	const timestamp = getCurrentTimestamp();
 
@@ -123,7 +163,7 @@ function editMessage(messageId, newMessage) {
 		url: 'api/editMessage.php',
 		type: 'post',
 		data: {
-			chatRoom: 'chatRoom',
+			chatRoom: sessionStorage.getItem('chatRoom'),
 			username: sessionStorage.getItem('username'),
 			id: messageId,
 			message: newMessage,
@@ -132,6 +172,18 @@ function editMessage(messageId, newMessage) {
 	});
 }
 
+/**
+ * Deletes a message from the chat room by sending an AJAX request to the server.
+ *
+ * @param {string|number} messageId - The unique identifier of the message to be deleted
+ *
+ * @returns {void} void
+ *
+ * @description This function sends a POST request to the deleteMessage.php API endpoint
+ * with the current chat room, username from session storage, message ID, and timestamp.
+ * The function relies on sessionStorage to contain 'chatRoom' and 'username' values,
+ * and expects getCurrentTimestamp() function to be available in the scope.
+ */
 function deleteMessage(messageId) {
 	const timestamp = getCurrentTimestamp();
 
@@ -139,7 +191,7 @@ function deleteMessage(messageId) {
 		url: 'api/deleteMessage.php',
 		type: 'post',
 		data: {
-			chatRoom: 'chatRoom',
+			chatRoom: sessionStorage.getItem('chatRoom'),
 			username: sessionStorage.getItem('username'),
 			id: messageId,
 			timestamp: timestamp.toString()
@@ -150,11 +202,13 @@ function deleteMessage(messageId) {
 /**
  * Displays new chat messages that haven't been shown before.
  *
+ * @param {Array<Object>} messages - Array of message objects to display
+ *
+ * @returns {void} void
+ *
  * @description This function iterates through an array of message objects and appends
  * only new messages (those not already displayed) to the #messages container. Each message
  * is displayed with a formatted timestamp, username, and message content.
- *
- * @param {Array<Object>} messages - Array of message objects to display
  */
 function showNewMessages(messages) {
 	messages.forEach(function (message) {
@@ -164,9 +218,9 @@ function showNewMessages(messages) {
 				$(`<div class="message" data-id="${message.id}">`)
 					.append(
 						$(`<div class="message-data">`)
-							.append(`<span class="timestamp">[${new Date(message.timestamp * 1000).toLocaleString()}]</span>`)
-							.append(' ')
 							.append(`<span class="username">${message.username}</span>`)
+							.append(' ')
+							.append(`<span class="timestamp">[${new Date(message.timestamp * 1000).toLocaleString()}]</span>`)
 					)
 					.append(`<div class="message-content">${message.message}</div>`)
 			);
@@ -176,8 +230,8 @@ function showNewMessages(messages) {
 				// add buttons and functionality for editing and deleting messages
 				$(`#messages .message[data-id="${message.id}"]`).append(
 					$(`<div class="message-actions">`)
-						.append(`<button class="edit-message"><span class="material-symbols-outlined">edit</span></button>`)
-						.append(`<button class="delete-message"><span class="material-symbols-outlined">delete</span></button>`)
+						.append(`<button class="edit-message"><span class="material-symbols-rounded">edit</span></button>`)
+						.append(`<button class="delete-message"><span class="material-symbols-rounded">delete</span></button>`)
 				);
 				// attach event handler for edit button
 				$(`#messages .message[data-id="${message.id}"] .edit-message`)
@@ -194,6 +248,18 @@ function showNewMessages(messages) {
 					.on('click', function () {
 						deleteMessage(message.id);
 					});
+				// hide action buttons initially
+				$(`#messages .message[data-id="${message.id}"] .message-actions`).hide();
+				// show action buttons on hover
+				$(`#messages .message[data-id="${message.id}"]`)
+					.hover(
+						function () {
+							$(this).find('.message-actions').show();
+						},
+						function () {
+							$(this).find('.message-actions').hide();
+						}
+					);
 				// add styling for messages from the current user
 				$(`#messages .message[data-id="${message.id}"]`).addClass('user-message');
 
@@ -208,10 +274,12 @@ function showNewMessages(messages) {
 /**
  * Removes deleted messages from the DOM based on their IDs.
  *
+ * @param {Array<Object>} messages - Array of message objects containing ID information
+ *
+ * @return {void}
+ *
  * @description This function iterates through an array of message objects and removes
  * the corresponding DOM elements for any messages that have been deleted.
- *
- * @param {Array<Object>} messages - Array of message objects containing ID information
  */
 function removeDeletedMessages(messages) {
 	messages.forEach(function (message) {

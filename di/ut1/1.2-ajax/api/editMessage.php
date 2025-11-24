@@ -25,11 +25,10 @@ for ($i = count($messages) - 1; $i >= 0; $i--) {
 			// edit message
 			$messages[$i]['message'] = $_POST['message'];
 			$messages[$i]['edit_timestamp'] = $_POST['timestamp'];
-			// set response code to HTTP 200 OK
-			http_response_code(200);
 			// write in file
 			file_put_contents($MESSAGES_FILE, json_encode($messages, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
-			echo 'a';
+			// set response code to HTTP 200 OK
+			http_response_code(200);
 			return;
 		} else {
 			// message is found but not modified, so stop searching
