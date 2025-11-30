@@ -8,9 +8,8 @@ public class PlayerMovement : MonoBehaviour
     private readonly String HORIZONTAL = "Horizontal";
     private readonly String VERTICAL = "Vertical";
     private readonly String ROTATION = "Mouse X";
-    private readonly String ELEVATION = "Mouse Y";
 
-    public float baseMovementSpeed = 1.5f;
+    public float baseMovementSpeed = 3f;
     public float rotationSpeed = 10f;
     public float jumpForce = 100f;
 
@@ -28,22 +27,30 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
+    void FixedUpdate()
+    {
+        float horizontal = Input.GetAxis(HORIZONTAL);
+        float vertical = Input.GetAxis(VERTICAL);
+
+        Vector3 direction = transform.forward * vertical + transform.right * horizontal;
+        rb.MovePosition(rb.position + direction * baseMovementSpeed * Time.fixedDeltaTime);
+    }
+
+
     // Update is called once per frame
     void Update()
     {
-        // Get X and Z axis
-        float horizontalMovement = Input.GetAxis(HORIZONTAL);
-        float verticalMovement = Input.GetAxis(VERTICAL);
         // Get mouse
         float rotation = Input.GetAxis(ROTATION);
-        float movementSpeed = Input.GetKeyDown(KeyCode.LeftShift) ? baseMovementSpeed * 2 : baseMovementSpeed;
-
-        // Move player
-        transform.Translate(new Vector3(horizontalMovement, 0, verticalMovement) * movementSpeed * Time.deltaTime);
         // Move camera
         transform.Rotate(new Vector3(0, rotation, 0) * rotationSpeed);
 
         // Jump
-        if (Input.GetKeyDown(KeyCode.Space)) rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("SALTO!");
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+
     }
 }
